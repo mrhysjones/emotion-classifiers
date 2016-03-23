@@ -20,9 +20,6 @@ data = {}
 # Data source dependent - don't want to include in emotion class list but still want to initialise
 data["Natural"] = [] 
 
-# Used to output the _not vectors for particular emotions
-everything = []
-
 # Obtain face data from CK+ Database
 print "Processing CK+ database"
 for sequence in os.listdir("Datasets/CK+/Emotion"):
@@ -34,27 +31,24 @@ for sequence in os.listdir("Datasets/CK+/Emotion"):
 				natural = False
 				for i, index_content in enumerate(open("Datasets/CK+/Emotion/" + sequence + "/" + episode + "/" + index + "_emotion.txt")):
 					emotion = emotions[int(float(index_content.strip()))]
-					if not emotion in data: data[emotion] = []
+ 					if not emotion in data: data[emotion] = []
 					os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + ".png . ; ./face_tracker " + index + ".png ; mv " + index + "* Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/")
 					data[emotion].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + ".vector")
 					data[emotion].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + "_mirror.vector")
-					everything.append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + ".vector")
-					everything.append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + "_mirror.vector")
 					if natural: 
 						for index in os.listdir("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode):
 							if ".png" in index:
 								os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + " . ; ./face_tracker " + index + " ; mv " + index[:index.index(".")] + "* Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/")
 								data["Natural"].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + ".vector")
-								everything.append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + "_mirror.vector")		
 							else:
 								index = sorted(os.listdir("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode))[0]
 								os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + " . ; ./face_tracker " + index + " ; mv " + index[:index.index(".")] + "* Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/")
 								data["Natural"].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + ".vector")
-								everything.append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + "_mirror.vector")
 
-# Obtain face data for KDEF Database
+
+# # Obtain face data for KDEF Database
+print "Processing KDEF database"
 for sequence in os.listdir("Datasets/KDEF"):
-	print "Processing KDEF database"
 	if sequence != '.DS_Store':
 		for episode in os.listdir("Datasets/KDEF/" + sequence):
 			if episode[len(episode)-3:] == "JPG" and episode[6] == "S":
@@ -80,22 +74,42 @@ for sequence in os.listdir("Datasets/KDEF"):
 				elif episode[4:6] == "SU":
 					data["Surprise"].append("Datasets/KDEF/" + sequence + "/" + episode.replace("JPG", "vector"))
 					data["Surprise"].append("Datasets/KDEF/" + sequence + "/" + episode[:episode.index(".")] + "_mirror.vector")
-				everything.append("Datasets/KDEF/" + sequence + "/" + episode.replace("JPG", "vector"))
-				everything.append("Datasets/KDEF/" + sequence + "/" + episode[:episode.index(".")] + "_mirror.vector")
+
+
+# Obtain face data from JAFFE Database
+print "Processing JAFFE database"
+for face in os.listdir("Datasets/jaffe"):	
+	if face != '.DS_Store' and '.jpeg' in face:
+		os.system("cp Datasets/jaffe/" + face + " . ; ./face_tracker " + face + " ; mv " + face[:face.index(".")] + "* Datasets/jaffe/")
+		if face[3:5] == "FE":
+			data["Fear"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Fear"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "AN":
+			data["Angry"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Angry"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "DI":
+			data["Disgust"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Disgust"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "HA":
+			data["Happy"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Happy"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "NE":
+			data["Natural"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Natural"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "SA":
+			data["Sadness"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Sadness"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+		elif face[3:5] == "SU":
+			data["Surprise"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
+			data["Surprise"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
+
  
 # Output vectors to emotion folders
+print "Categorising vectors"
 for emotion_id in data:
-	print "Categorising vectors"
 	if not os.path.exists("Face data/" + emotion_id): os.makedirs("Face data/" + emotion_id)
 	for index in data[emotion_id]: 
 		try:
 			shutil.copy2(index, "Face data/" + emotion_id)
 		except:
 			print("Error:", index)
-
-			if not os.path.exists(emotion_id + " not"): os.makedirs(emotion_id + " not")
-			for index in set(everything) - set(data[emotion_id]):
-				try:
-					shutil.copy2(index, "Face data/" + emotion_id + " not")
-				except:
-					print("Error not:", index)   
