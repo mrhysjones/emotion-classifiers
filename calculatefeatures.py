@@ -44,7 +44,6 @@ for key in data:
 		right_eye = point_between(vertex[43], vertex[46])
 		between_eyes = distance_between(left_eye, right_eye)
 		nose = point_between(vertex[31], vertex[34])
-
 		for x in range(1, 17 + 1):
 			fout.write(" " + str(i) + ":" + str(distance_between(vertex[x], nose) / between_eyes))
 			i += 1
@@ -93,6 +92,4 @@ for key in data:
 		fout.write(" " + str(i) + ":" + str(distance_between(vertex[62], vertex[65]) / between_eyes))
 		i += 1
 		fout.write(" " + str(i) + ":" + str(distance_between(vertex[63], vertex[64]) / between_eyes))
-
 		fout.write("\n")
-os.system("cp ./emotions.train ./pca_archive_data.txt")
