@@ -48,7 +48,7 @@ for sequence in os.listdir("Datasets/CK+/Emotion"):
 									data["Natural"].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + ".vector")
 
 
-# Obtain face data for KDEF Database (http://www.emotionlab.se/resources/kdef)
+# # TObtain face data for KDEF Database (http://www.emotionlab.se/resources/kdef)
 print "Processing KDEF database"
 for sequence in os.listdir("Datasets/KDEF"):
 	if sequence != '.DS_Store':
@@ -79,7 +79,7 @@ for sequence in os.listdir("Datasets/KDEF"):
 					data["Surprise"].append("Datasets/KDEF/" + sequence + "/" + face[:face.index(".")] + "_mirror.vector")
 
 
-# # Obtain face data from JAFFE Database (http://www.kasrl.org/jaffe.html)
+# # # Obtain face data from JAFFE Database (http://www.kasrl.org/jaffe.html)
 print "Processing JAFFE database"
 for face in glob.glob('Datasets/jaffe/*.jpeg'):	
 	face = os.path.basename(face)
@@ -106,7 +106,7 @@ for face in glob.glob('Datasets/jaffe/*.jpeg'):
 		data["Surprise"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
 		data["Surprise"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
 
-# Obtain face data from RaFD database (http://www.socsci.ru.nl:8180/RaFD2/RaFD?p=main)
+# # Obtain face data from RaFD database (http://www.socsci.ru.nl:8180/RaFD2/RaFD?p=main)
 print "Processing RaFD database"
 for face in glob.glob('Datasets/RaFD/*.jpg'):
 	face = os.path.basename(face)
@@ -137,7 +137,28 @@ for face in glob.glob('Datasets/RaFD/*.jpg'):
 		data["Surprise"].append("Datasets/RaFD/" + face.replace("jpg", "vector"))
 		data["Surprise"].append("Datasets/RaFD/" + face[:face.index(".")] + "_mirror.vector")
 
-
+# Obtain face data from GEMEP-FERA training data
+print "Processing GEMEP-FERA database"
+gemep_path = 'Datasets/GEMEP-FERA/training/'
+for recording in os.listdir(gemep_path):
+	if recording != '.DS_Store':
+		for frame in glob.glob(gemep_path + recording + '/*.jpg'):
+			frame = os.path.basename(frame)
+			os.system("cp " + gemep_path + recording + '/' + frame + " . ; ./face_tracker " + frame + " ; mv " + frame[:frame.index(".")] + "* " + gemep_path + '/' + recording)
+			components = frame.split('-')
+			if components[1] == 'anger':
+				data["Angry"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
+	 			data["Angry"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")
+	 		elif components[1] == 'fear':
+				data["Fear"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
+	 			data["Fear"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")	
+	 		elif components[1] == 'joy':
+				data["Happy"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
+	 			data["Happy"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")
+	 		elif components[1] == 'sadnesss':
+				data["Sadness"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
+	 			data["Sadness"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")
+				
 # Output vectors to emotion folders
 print "Categorising vectors"
 for emotion_id in data:
@@ -148,4 +169,3 @@ for emotion_id in data:
 		except:
 			print("Error:", index)
 
-# 

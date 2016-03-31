@@ -22,6 +22,8 @@ The training data itself has not been included in this repository. Please visit 
 - [Karolinska Directed Emotional Faces (KDEF)](http://www.emotionlab.se/resources/kdef)
 - [The Japanese Female Facial Expression (JAFFE) Database](http://www.kasrl.org/jaffe.html)
 - [Radboud Faces Database (RaFD)](http://www.socsci.ru.nl:8180/RaFD2/RaFD?p=main)
+- [GEMEP-FERA Dataset](http://sspnet.eu/2011/05/gemep-fera/)
+
 
 ## Training Process
 ![Cross Validation][emotions.train.pca.scale.png]
