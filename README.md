@@ -26,12 +26,12 @@ The training data itself has not been included in this repository. Please visit 
 
 
 ## Training Process
-![Cross Validation][emotions.train.pca.scale.png]
+1. Facial landmarks are obtained for the datasets (assumed to be in a Datasets directory) using the [FaceTracker Library](https://github.com/kylemcdonald/FaceTracker). The resultant vectors of landmarks are then categorised by their class label i.e. Angry . See [facetrack.py](facetrack.py) for more details. 
+2. Distance measures are calculated from the facial landmarks to obtain feature set. See [calculatefeatures.py](calculatefeatures.py) for details
+3. Principal Component Analysis on distance measures to find principal features. See [pca.py](pca.py) for more details. 
+4. SVM training on principal components using [LIBSVM](https://www.csie.ntu.edu.tw/~cjlin/libsvm/). This will produce a graphic (see below) for cross validation of the classifier. See [svm.py](svm.py) for more details.
 
-1. Facial landmarks are obtained for the datasets (assumed to be in a Datasets directory) using the [FaceTracker Library](https://github.com/kylemcdonald/FaceTracker). The resultant vectors of landmarks are then categorised by their class label i.e. Angry . See *facetrack.py* for more details. 
-2. Distance measures are calculated from the facial landmarks to obtain feature set. See *calculatefeatures.py* for details
-3. Principal Component Analysis on distance measures to find principal features. See *pca.py* for more details. 
-4. SVM training on principal components using [LIBSVM](https://www.csie.ntu.edu.tw/~cjlin/libsvm/). This will produce a graphic (see above) for cross validation of the classifier. See *svm.py* for more details.
+![Cross Validation Plot](emotions.train.pca.scale.png)
 
 ### Example of training process
 <p><code>python facetrack.py</code></p>
