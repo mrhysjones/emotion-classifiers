@@ -14,7 +14,6 @@ emotions = {
 6 : "Sadness",
 7 : "Surprise"
 }
-
 data = {}
 
 # Data source dependent - don't want to include in emotion class list but still want to initialise
@@ -26,29 +25,17 @@ for sequence in os.listdir("Datasets/CK+/Emotion"):
 	if sequence != '.DS_Store':
 		for episode in os.listdir('Datasets/CK+/Emotion/' + sequence):
 			if episode != '.DS_Store':
-				natural = True
 				for index in glob.glob("Datasets/CK+/Emotion/" + sequence + "/" + episode + "/*.txt"):
 					index = os.path.basename(index)
 					index = index[:index.index("_emotion")]
-					natural = False
 					for i, index_content in enumerate(open("Datasets/CK+/Emotion/" + sequence + "/" + episode + "/" + index + "_emotion.txt")):
 						emotion = emotions[int(float(index_content.strip()))]
 	 					if not emotion in data: data[emotion] = []
 						os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + ".png . ; ./face_tracker " + index + ".png ; mv " + index + "* Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/")
 						data[emotion].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + ".vector")
 						data[emotion].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + "_mirror.vector")
-						if natural: 
-							for index in os.listdir("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + face):
-								if ".png" in index:
-									os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index + " . ; ./face_tracker " + index + " ; mv " + index[:index.index(".")] + "* Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/")
-									data["Natural"].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + ".vector")
-								else:
-									index = sorted(os.listdir("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode))[0]
-									os.system("cp Datasets/CK+/cohn-kanade-images/" + sequence + "/" + face + "/" + episode + " . ; ./face_tracker " + index + " ; mv " + index[:index.index(".")] + "* Datasets/CK+/cohn-kanade-images/" + episode + "/" + face + "/")
-									data["Natural"].append("Datasets/CK+/cohn-kanade-images/" + sequence + "/" + episode + "/" + index[:index.index(".")] + ".vector")
 
-
-# # TObtain face data for KDEF Database (http://www.emotionlab.se/resources/kdef)
+# # Obtain face data for KDEF Database (http://www.emotionlab.se/resources/kdef)
 print "Processing KDEF database"
 for sequence in os.listdir("Datasets/KDEF"):
 	if sequence != '.DS_Store':
@@ -79,7 +66,7 @@ for sequence in os.listdir("Datasets/KDEF"):
 					data["Surprise"].append("Datasets/KDEF/" + sequence + "/" + face[:face.index(".")] + "_mirror.vector")
 
 
-# # # Obtain face data from JAFFE Database (http://www.kasrl.org/jaffe.html)
+# Obtain face data from JAFFE Database (http://www.kasrl.org/jaffe.html)
 print "Processing JAFFE database"
 for face in glob.glob('Datasets/jaffe/*.jpeg'):	
 	face = os.path.basename(face)
@@ -106,7 +93,7 @@ for face in glob.glob('Datasets/jaffe/*.jpeg'):
 		data["Surprise"].append("Datasets/jaffe/" + face.replace("jpeg", "vector"))
 		data["Surprise"].append("Datasets/jaffe/" + face[:face.index(".")] + "_mirror.vector")
 
-# # Obtain face data from RaFD database (http://www.socsci.ru.nl:8180/RaFD2/RaFD?p=main)
+# Obtain face data from RaFD database (http://www.socsci.ru.nl:8180/RaFD2/RaFD?p=main)
 print "Processing RaFD database"
 for face in glob.glob('Datasets/RaFD/*.jpg'):
 	face = os.path.basename(face)
@@ -133,7 +120,7 @@ for face in glob.glob('Datasets/RaFD/*.jpg'):
 	elif components[4] == 'sad':
 		data["Sadness"].append("Datasets/RaFD/" + face.replace("jpg", "vector"))
 		data["Sadness"].append("Datasets/RaFD/" + face[:face.index(".")] + "_mirror.vector")
-	elif components[4] == 'surprise':
+	elif components[4] == 'surprised':
 		data["Surprise"].append("Datasets/RaFD/" + face.replace("jpg", "vector"))
 		data["Surprise"].append("Datasets/RaFD/" + face[:face.index(".")] + "_mirror.vector")
 
@@ -155,7 +142,7 @@ for recording in os.listdir(gemep_path):
 	 		elif components[1] == 'joy':
 				data["Happy"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
 	 			data["Happy"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")
-	 		elif components[1] == 'sadnesss':
+	 		elif components[1] == 'sadness':
 				data["Sadness"].append(gemep_path + '/' + recording + '/' + frame.replace("jpg", "vector"))
 	 			data["Sadness"].append(gemep_path + '/' + recording + '/' + frame[:frame.index(".")] + "_mirror.vector")
 				
@@ -168,4 +155,3 @@ for emotion_id in data:
 			shutil.copy2(index, "Face data/" + emotion_id)
 		except:
 			print("Error:", index)
-
