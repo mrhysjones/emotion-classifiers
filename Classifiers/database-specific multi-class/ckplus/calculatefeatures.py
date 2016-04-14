@@ -1,4 +1,4 @@
-# Python script to calculate the distance measures (features) for all of the tracked face data
+ # Python script to calculate the distance measures (features) for all of the tracked face data
 # 
 import os
 
@@ -19,13 +19,12 @@ emotions = {
 	"Fear" 		: 4,
 	"Happy" 	: 5,
 	"Sadness" 	: 6,
-	"Surprise" 	: 7,
-	"Natural" 	: 8 # Other
+	"Surprise" 	: 7
 }
 
 data = {}
 fout = open("emotions.train", "w")
-for name in ["Happy", "Sadness", "Surprise", "Angry", "Contempt", "Disgust", "Fear", "Natural"]:
+for name in ["Happy", "Sadness", "Surprise", "Angry", "Contempt", "Disgust", "Fear"]:
 	data[str(emotions[name])] = []
 	for sequence in os.listdir('Face data/' + name):
 		data[str(emotions[name])].append([])

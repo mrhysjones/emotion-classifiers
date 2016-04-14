@@ -14,18 +14,17 @@ def point_between(n1, n2):
 
 emotions = {
 	"Angry"		: 1,
-	"Contempt" 	: 2,
-	"Disgust" 	: 3,
-	"Fear" 		: 4,
-	"Happy" 	: 5,
-	"Sadness" 	: 6,
-	"Surprise" 	: 7,
-	"Natural" 	: 8 # Other
+	"Disgust" 	: 2,
+	"Fear" 		: 3,
+	"Happy" 	: 4,
+	"Sadness" 	: 5,
+	"Surprise" 	: 6,
+	"Natural" 	: 7 # Other
 }
 
 data = {}
 fout = open("emotions.train", "w")
-for name in ["Happy", "Sadness", "Surprise", "Angry", "Contempt", "Disgust", "Fear", "Natural"]:
+for name in ["Happy", "Sadness", "Surprise", "Angry", "Disgust", "Fear", "Natural"]:
 	data[str(emotions[name])] = []
 	for sequence in os.listdir('Face data/' + name):
 		data[str(emotions[name])].append([])
