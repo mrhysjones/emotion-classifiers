@@ -73,6 +73,6 @@ i += 1
 fout.write(" " + str(i) + ":" + str(distance_between(vertex[62], vertex[65]) / between_eyes))
 i += 1
 fout.write(" " + str(i) + ":" + str(distance_between(vertex[63], vertex[64]) / between_eyes))
-print i
+
 fout.write("\n")
 fout.close()
